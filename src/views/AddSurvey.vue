@@ -89,6 +89,7 @@ export default {
     async fetchUsers() {
       try {
         const response = await axios.get('https://feedback.waelchafei.workers.dev/getUsers');
+        console.log("ressssssssssssssssssssss",response);
         const usersData1 = response.data; // Axios automatically handles JSON parsing
         const usersData = JSON.parse(usersData1.users);
         this.users = usersData.users;
