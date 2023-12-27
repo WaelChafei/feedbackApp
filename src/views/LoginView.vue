@@ -34,9 +34,10 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Origin': 'https://feedbackapp.pages.dev', // Replace with your frontend domain
+              'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE',
+              'Access-Control-Allow-Headers': 'Content-Type, Accept',
+              'Access-Control-Allow-Credentials': 'true',
             },
             body: JSON.stringify({
               email: this.username,
