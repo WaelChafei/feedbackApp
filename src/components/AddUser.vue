@@ -23,6 +23,7 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -36,17 +37,15 @@
     methods: {
       async addUser() {
         try {
-          const response = await fetch('http://localhost:3000/postUsers', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              name: this.newUser.name,
-              email: this.newUser.email,
-              role: this.newUser.role,
-            }),
-          });
+          const response = await axios.post('https://feedback.waelchafei.workers.dev/postUsers', {
+    name: this.newUser.name,
+    email: this.newUser.email,
+    role: this.newUser.role,
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   
           if (response.ok) {
             console.log('User added successfully!');

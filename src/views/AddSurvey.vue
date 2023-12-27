@@ -66,15 +66,16 @@ import "survey-core/defaultV2.min.css";
 import { StylesManager } from "survey-core";
 import { Survey } from 'survey-knockout-ui';
 import Sidebar from '@/components/Sidebar.vue';
-
+import axios from 'axios';
 StylesManager.applyTheme("defaultV2");
+
 export default {
   components:{
     Sidebar,
   },
   data() {
     return {
-      showSidebar: true, // Set to false for login view
+      showSidebar: true,
       cards: [{ name: '', title: '', type: 'text' }],
       users: [],
       selectedUsers: [],
@@ -87,51 +88,41 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch('http://localhost:3000/getUsers');
-        const clonedResponse = response.clone(); // Clone the response before reading the body
-        const result = await clonedResponse.json();
-        console.log("results", result);
-        // Parse the JSON string received from the API
-        const usersData1 = JSON.parse(result);
-
-
+        const response = await axios.get('https://feedback.waelchafei.workers.dev/getUsers');
+        const usersData1 = response.data; // Axios automatically handles JSON parsing
         const usersData = JSON.parse(usersData1.users);
         this.users = usersData.users;
         console.log("users", this.users);
-
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     },
 
-    submitSurvey(card) {
-      // Implement logic to submit the survey to the server
+    async submitSurvey(card) {
       const surveyData = {
         name: card.name,
         title: card.title,
         type: card.type,
       };
 
-      // Example: send the survey data to the server using an API
       console.log('Submitting survey:', surveyData);
 
-      // Clear the form after submission (optional)
       card.name = '';
       card.title = '';
       card.type = '';
     },
+
     addCard() {
       this.cards.push({ name: '', title: '', type: '' });
     },
-    logSurveyData() {
-      // Prepare survey data array
+
+    async logSurveyData() {
       const surveyData = this.cards.map(card => ({
         name: card.name,
         title: card.title,
         type: card.type,
       }));
 
-      // Prepare the payload for the POST request
       const postData = {
         survey3: {
           questions: surveyData,
@@ -139,71 +130,45 @@ export default {
         },
       };
 
-      // Log the survey data with the desired structure
       console.log('Survey Data:', postData);
-      fetch('http://localhost:3000/showSurvey')
-        .then(response => response.json())
-        .then(surveys => {
-          // Find the last survey added
-          console.log("surveys", surveys);
-          const parsedsureys2 = JSON.parse(surveys);
-          const parsedsureys = JSON.parse(parsedsureys2.surveys);
-          console.log("parsedsureys", parsedsureys);
-          const lastSurvey = Object.keys(parsedsureys[parsedsureys.length - 1])[0];
-          console.log("lastSurvey", lastSurvey);
-          const lastSurveyNumber = parseInt(lastSurvey.replace("survey", ""));
-          const nextSurveyNumber = lastSurveyNumber + 1;
-          const nextSurveyName = "survey" + nextSurveyNumber;
-          console.log("nextSurveyName", nextSurveyName);
 
-          const postData = {
-            [nextSurveyName]: {
-              questions: surveyData,
-              users: this.selectedUsers,
-            },
-          };
-          console.log("postData", postData);
-          fetch('http://localhost:3000/createSurvey', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(postData),
-          })
-            .then(response => response.json())
-            .then(result => {
-              console.log('Survey creation response:', result);
-              const emailData = {
-      to: this.selectedUsers.map(user => ({ "email": user, "name": "test" })),
-    };
-    console.log("emailData",emailData);
-    fetch('http://localhost:3000/sendMail', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailData),
-    })
-    .then(emailResponse => emailResponse.json())
-    .then(emailResult => {
-      console.log('Email sending response:', emailResult);
-      alert('Survey has been added successfully! Email has been sent to selected users.');
-      this.$router.push('/surveys');
-    })
-    .catch(emailError => {
-      console.error('Error sending email:', emailError);
-      alert('Survey has been added successfully, but there was an error sending the email.');
-      this.$router.push('/surveys');
-    });
-  })
-  .catch(error => {
-    console.error('Error creating survey:', error);
-    alert('Error creating survey. Please try again.');
-  });
-    })}
+      try {
+        const surveysResponse = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey',{          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          },});
+        const surveys = JSON.parse(surveysResponse.data.surveys);
+        const lastSurvey = Object.keys(surveys[surveys.length - 1])[0];
+        const lastSurveyNumber = parseInt(lastSurvey.replace("survey", ""));
+        const nextSurveyNumber = lastSurveyNumber + 1;
+        const nextSurveyName = "survey" + nextSurveyNumber;
 
+        const postData = {
+          [nextSurveyName]: {
+            questions: surveyData,
+            users: this.selectedUsers,
+          },
+        };
 
+        const createSurveyResponse = await axios.post('https://feedback.waelchafei.workers.dev/createSurvey', postData);
+        console.log('Survey creation response:', createSurveyResponse.data);
 
+        const emailData = {
+          to: this.selectedUsers.map(user => ({ "email": user, "name": "test" })),
+        };
+
+        const emailResponse = await axios.post('https://feedback.waelchafei.workers.dev/sendMail', emailData);
+        console.log('Email sending response:', emailResponse.data);
+
+        alert('Survey has been added successfully! Email has been sent to selected users.');
+        this.$router.push('/surveys');
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error during the process. Please try again.');
+      }
+    },
   },
 };
 </script>
