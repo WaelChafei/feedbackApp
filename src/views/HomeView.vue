@@ -30,7 +30,7 @@
 <script>
  import AddUser from '@/components/AddUser.vue';
  import Sidebar from '@/components/Sidebar.vue';
-
+  import axios from 'axios';
 export default {
   name: 'AddUserView',
   components: {
@@ -49,7 +49,7 @@ export default {
   methods: {
     async fetchUserData() {
     try {
-      const response = await fetch('http://localhost:3000/getUsers');
+      const response = await axios.get('https://feedback.waelchafei.workers.dev/getUsers');
       if (response.ok) {
         const clonedResponse = response.clone();  
         const result = await clonedResponse.json();

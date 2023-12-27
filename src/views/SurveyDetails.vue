@@ -9,7 +9,7 @@
 
 <script>
 import { Survey } from 'survey-knockout-ui';
-
+import axios from 'axios';
 export default {
 
     props: {
@@ -29,7 +29,7 @@ export default {
   methods: {
   async loadSurvey(){
 
-        const response = await fetch('http://localhost:3000/showSurvey');
+        const response = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey');
         const clonedResponse = response.clone(); 
         const result = await clonedResponse.json();
         console.log("results",result);
