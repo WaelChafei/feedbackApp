@@ -1,10 +1,27 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <Layout :showSidebar="isLoggedIn">
+      <template v-if="isLoggedIn">
+        <nav>
+          <router-link to="/home">Home</router-link> |
+          <router-link to="/about">About</router-link>
+        </nav>
+      </template>
+      <router-view/>
+    </Layout>
+  </div>
 </template>
+
+<script>
+ 
+export default {
+  data() {
+    return {
+      isLoggedIn: false, 
+    };
+  },
+};
+</script>
 
 <style>
 #app {
