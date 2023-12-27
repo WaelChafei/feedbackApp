@@ -17,6 +17,7 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -30,10 +31,12 @@
       async login() {
         try {
           this.isLoading = true;
-          const response = await fetch('http://localhost:3000/login', {
-            method: 'POST',
+          const response = await axios.post('http://localhost:3000/login', {
             headers: {
               'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type',
             },
             body: JSON.stringify({
               email: this.username,
