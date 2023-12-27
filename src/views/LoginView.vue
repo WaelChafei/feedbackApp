@@ -17,56 +17,74 @@
   </template>
   
   <script>
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        isLoading: false,
-        errorMessage: '',
-      };
-    },
-    methods: {
-      async login() {
-        try {
-          this.isLoading = true;
-          const response = await fetch('https://feedback.waelchafei.workers.dev/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://feedbackapp.pages.dev', // Replace with your frontend domain
-              'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE',
-              'Access-Control-Allow-Headers': 'Content-Type, Accept',
-              'Access-Control-Allow-Credentials': 'true',
-            },
-            body: JSON.stringify({
-              email: this.username,
-              password: this.password,
-            }),
-          });
-  
-          if (response.ok) {
-            const result = await response.json();
-  
-            if (result === 'Success') {
-              console.log('Success!');  
-              this.$router.push({ name: 'home' });
-            } else {
-              this.errorMessage = 'Invalid credentials';
-            }
-          } else {
-            console.error('API request failed:', response.status, response.statusText);
-            this.errorMessage = 'Wrong credentials. please login again!';
-          }
-        } catch (error) {
-          console.error('Error during API request:', error);
-          this.errorMessage = 'Wrong credentials. please login again!';
-        } finally {
-          this.isLoading = false;
-        }
-      },
-    },
-  };
+// Import the Axios library
+import axios from 'axios';
+
+interface RequestBody {
+  email: string;
+  password: string;
+}
+
+interface Env {
+  userskv: KVNamespace;
+}
+
+export const login = async (
+  request: Request,
+  env: Env,
+  context: any,
+  data: Record<string, any>
+) => {
+  try {
+    const headers = new Headers({
+      'Access-Control-Allow-Origin': '*', 
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type, Accept',
+      'Access-Control-Allow-Credentials': 'true',
+      'Content-Type': 'application/json'
+    });
+
+    if (request.method === 'OPTIONS') {
+      // Handle CORS preflight requests
+      return new Response(null, {
+        headers,
+      });
+    }
+
+    const requestBody = await request.json() as RequestBody;
+    const { email, password } = requestBody;
+
+    const adminCredentials = await env.userskv.get('admin');
+
+    if (!adminCredentials) {
+      return new Response('Admin not found', { status: 401, headers });
+    }
+
+    const { email: storedEmail, password: storedPassword } = JSON.parse(adminCredentials);
+
+    if (email === storedEmail && password === storedPassword) {
+      // Use Axios to make a request
+      const axiosResponse = await axios.post('https://your-api-endpoint.com/login', requestBody);
+
+      return new Response(axiosResponse.data, {
+        status: axiosResponse.status,
+        headers: {...headers },
+      });
+    } else {
+      return new Response('Invalid credentials', {
+        status: 401,
+        headers: {  ...headers },
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+};
+
   </script>
   
   <style scoped>
