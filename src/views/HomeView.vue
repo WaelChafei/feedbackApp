@@ -54,7 +54,7 @@ export default {
       if (response.status==200) {
         const clonedResponse = response.data;  
         console.log("clonedResponse",clonedResponse);
-        const result = JSON.parse(clonedResponse);
+        const result = response.data;
         console.log("results",result);
          const usersData1 = JSON.parse(result);
 
