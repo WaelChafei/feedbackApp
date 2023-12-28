@@ -56,7 +56,7 @@ export default {
         console.log("clonedResponse",clonedResponse);
         const result = response.data;
         console.log("results",result);
-         const usersData1 = JSON.parse(result);
+         const usersData1 = response.data;
 
         console.log("userssdata",usersData1);
 
