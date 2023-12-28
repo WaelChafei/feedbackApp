@@ -30,14 +30,13 @@ export default {
   async loadSurvey(){
 
         const response = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey');
-        const clonedResponse = response.clone(); 
-        const result = await clonedResponse.json();
+        const result = response.data;
         console.log("results",result);
-         const surveyData1 = JSON.parse(result);
+ 
   
-        console.log("surveyData1",surveyData1);
+ 
         const surveyId=this.id;
-        const allsurveys=surveyData1.surveys
+        const allsurveys=result.surveys
         const jsonallsurveys = JSON.parse(allsurveys);
 
         console.log("surveyId",surveyId);
