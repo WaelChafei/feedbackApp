@@ -39,10 +39,9 @@
       async fetchSurveys() {
         try {
           const response = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey');
-          if (response.ok) {
-            const surveysData1 = await response.json();
-            const surveysData2 = JSON.parse(surveysData1);
-            const surveysData = JSON.parse(surveysData2.surveys);
+          if (response.status==200) {
+            const surveysData1 = response.data;
+            const surveysData = JSON.parse(surveysData1.surveys);
  
 
             this.surveys = surveysData.map((item) => ({
