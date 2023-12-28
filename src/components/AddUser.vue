@@ -43,11 +43,6 @@ export default {
             name: this.newUser.name,
             email: this.newUser.email,
             role: this.newUser.role,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
           }
         );
 
