@@ -133,12 +133,7 @@ export default {
       console.log('Survey Data:', postData);
 
       try {
-        const surveysResponse = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey',{          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-          },});
+        const surveysResponse = await axios.get('https://feedback.waelchafei.workers.dev/showSurvey');
         const surveys = JSON.parse(surveysResponse.data.surveys);
         const lastSurvey = Object.keys(surveys[surveys.length - 1])[0];
         const lastSurveyNumber = parseInt(lastSurvey.replace("survey", ""));

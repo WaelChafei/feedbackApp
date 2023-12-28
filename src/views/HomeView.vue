@@ -50,8 +50,10 @@ export default {
     async fetchUserData() {
     try {
       const response = await axios.get('https://feedback.waelchafei.workers.dev/getUsers');
+        console.log("response",response);
       if (response.ok) {
         const clonedResponse = response.clone();  
+        console.log("clonedResponse",clonedResponse);
         const result = await clonedResponse.json();
         console.log("results",result);
          const usersData1 = JSON.parse(result);
