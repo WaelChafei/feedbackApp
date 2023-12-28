@@ -32,17 +32,19 @@ export default {
         this.isLoading = true;
         const response = await axios.post('https://feedback.waelchafei.workers.dev/login', {
           email: this.username,
-          password: this.password,
+          password: this.password},{
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
           },
+          withCredentials: true,
+        },
 
 
 
-        });
+        );
 
         if (response.ok) {
           const result = await response.json();
