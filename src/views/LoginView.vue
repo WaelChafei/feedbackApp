@@ -44,7 +44,7 @@ export default {
 
         });
 
-        if (response.ok) {
+        if (response.status === 200) {
           const result = await response.json();
 
           if (result === 'Success') {

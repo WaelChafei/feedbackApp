@@ -43,6 +43,12 @@ export default {
             name: this.newUser.name,
             email: this.newUser.email,
             role: this.newUser.role,
+            headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          },
           }
         );
 
