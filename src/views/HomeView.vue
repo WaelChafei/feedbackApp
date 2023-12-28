@@ -52,7 +52,9 @@ export default {
       const response = await axios.get('https://feedback.waelchafei.workers.dev/getUsers');
         console.log("response",response);
       if (response.status==200) {
-        const result = await response.json();
+        const clonedResponse = response.data;  
+        console.log("clonedResponse",clonedResponse);
+        const result = await clonedResponse.json();
         console.log("results",result);
          const usersData1 = JSON.parse(result);
 
