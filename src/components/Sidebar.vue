@@ -19,20 +19,16 @@
 <script>
 </script>
 <style scoped>
-/* Add your custom styles for the AddSurvey component here */
 .add-survey {
   display: flex;
 }
 
 .sidebar {
   background-color: #012901;
-  /* Dark green color */
   color: #fff;
-  /* Text color */
   width: 250px;
   padding-top: 20px;
   height: 250vh;
-  /* 100% of the viewport height */
 }
 
 .sidebar-header {
@@ -59,7 +55,6 @@
 
 .nav-link:hover {
   background-color: #008000;
-  /* Dark green color on hover */
 }
 
 .content {
@@ -81,7 +76,6 @@
   border-radius: 8px;
   padding: 15px;
   max-width: 400px;
-  /* Set the maximum width of the card */
   box-sizing: border-box;
 }
 
@@ -114,6 +108,5 @@ button {
   border-radius: 4px;
   font-size: 1rem;
   margin-top: 5px;
-  /* Added margin at the top of the button */
 }
 </style>

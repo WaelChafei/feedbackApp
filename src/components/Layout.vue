@@ -17,7 +17,7 @@
     },
     data() {
       return {
-        showSidebar: true, // Set to false for login view
+        showSidebar: true, 
       };
     },  watch: {
     $route(to, from) {
@@ -28,6 +28,5 @@
   </script>
   
   <style scoped>
-  /* Layout component styles go here */
   </style>
   
