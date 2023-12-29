@@ -5,7 +5,7 @@
       </div>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <router-link to="/home" class="nav-link">Home</router-link>
+          <router-link to="/" class="nav-link">Home</router-link>
         </li>
         <li class="nav-item">
           <router-link to="/addsurvey" class="nav-link">Add survey</router-link>

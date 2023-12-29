@@ -7,7 +7,7 @@ import SurveyDetails from '../views/SurveyDetails.vue';
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: HomeView,
   },
@@ -15,12 +15,6 @@ const routes = [
     path: '/addsurvey',
     name: 'Add Survey',
     component: AddSurvey,
-  },
-  {
-    path: '/',
-    name: 'login',
-    component: LoginView,
-    meta: { layout: 'no-sidebar' }, // Add meta information for login view
   },
   {
     path: '/surveys',
